@@ -2,4 +2,7 @@ public class Wall
 {
   public static void main (String[] args)
   {
-    private int 
+    private int xValue;
+    private int test;
+  }
+}
