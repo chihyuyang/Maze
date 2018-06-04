@@ -1,6 +1,0 @@
-public abstact class Tile
-{
-  private int xValue;
-  private int yValue;
-  private boolean passable;
-}
