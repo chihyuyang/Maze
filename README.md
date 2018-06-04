@@ -1,6 +1,6 @@
 # Maze
 AP Computer Science A Final Project<br />
-By Benjamin Catalfo, Cliff Woo, Eric Yang, and Benjamin Catalfo<br />
+By Benjamin Catalfo, Cliff Woo, Eric Yang, and Victor Jiao<br />
 
 Ideas to Implement:<br />
 Different types of tiles (door tile, key tile to open door, wall tile, floor tile, metal (indestructible) door, portal tiles that take you to its corresponding tile)<br />
