@@ -1,4 +1,4 @@
-public class abstract Tile
+public abstact class Tile
 {
   private int xValue;
   private int yValue;
