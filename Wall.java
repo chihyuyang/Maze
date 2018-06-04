@@ -1,4 +1,4 @@
-public class Wall
+public class Wall extends Tile
 {
   public static void main (String[] args)
   {
