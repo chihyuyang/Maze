@@ -1,5 +1,5 @@
 # Maze
-AP Computer Science A Final Project
+AP Computer Science A Final Project<br />
 By Benjamin Catalfo, Cliff Woo, Eric Yang, and Benjamin Catalfo
 
 Ideas to Implement:
