@@ -16,8 +16,8 @@ public class Main{
 	static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
     public static void main(String[] args) {
         JFrame frame = new JFrame("Maze");
-        frame.setFocusable(false);
-        frame.setUndecorated(true);
+        frame.setFocusable(false); //when the frame is focusable it could accidentally intercept inputs (mosue/keyboard) intended for the JPanel
+        frame.setUndecorated(true); //since its gonna be fullscreen we dont want the minimize/mazimize/x-out buttons
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
         device.setFullScreenWindow(frame);
@@ -25,7 +25,7 @@ public class Main{
         JButton exitButton = new JButton("Quit");
         exitButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) { //when you press the quit button close the frame
                 frame.setVisible(false);
                 frame.dispose();
             }
@@ -50,7 +50,7 @@ public class Main{
         
         MazePanel mazePanel = new MazePanel(exampleSize,exampleSize,exampleMaze);
         mazePanel.add(exitButton);
-        mazePanel.setFocusable(true);
+        mazePanel.setFocusable(true); //jpanel needs to recognize mouse/keyboard inputs
         frame.add(mazePanel, BorderLayout.CENTER);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(screenSize.width, screenSize.height);
