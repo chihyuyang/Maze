@@ -17,6 +17,7 @@ public class Main{
     public static void main(String[] args) {
         JFrame frame = new JFrame("Maze");
         frame.setFocusable(false);
+        frame.setUndecorated(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
         device.setFullScreenWindow(frame);
