@@ -128,9 +128,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
         if (!this.first) {
         	changedTiles.clear();
         }
-        else {
-        	this.first = false;
-        }
+        
     }
 
 	@Override
@@ -210,6 +208,9 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	    if (!this.first) {
 			repaint();
 		}
+	    else {
+	    	this.first = false;
+	    }
 	}
 
 	@Override
