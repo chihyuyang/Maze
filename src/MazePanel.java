@@ -26,13 +26,13 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	private int width;
 	private int height;
 	private Tile[][] maze;
-	ArrayList<ArrayList<Integer>> changedTiles;
+	ArrayList<ArrayList<Integer>> changedTiles; //keep track of the tiles we change so we dont have to redraw every tile every frame
 	private int playerX;
 	private int playerY;
 	public int tileSize;
 	public Dimension screenSize;
-	public boolean first;
-    //construct a PongPanel
+	public boolean first; //make sure you don't call repaint from our mouselistener or keyboardlistener before paintcomponent is called for the first time. if we did call repain before paintcomponent is initially called it would clear the screen, making the maze invisible
+    //construct a MazePanel
     public MazePanel(int width, int height, Tile[][] maze){
         setBackground(Color.WHITE);
         this.width = width;
@@ -44,7 +44,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
         this.addKeyListener(this);
         this.addMouseListener(this);
         this.changedTiles = new ArrayList<>();
-        for (int i = 0; i < maze.length; i++) {
+        for (int i = 0; i < maze.length; i++) { //in the first frame we need to update every tile, otherwise the maze would be invisible
         	for (int j = 0; j < maze[0].length; j++) {
         		ArrayList<Integer> temp = new ArrayList<>();
         		temp.add(i);
@@ -69,7 +69,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	*/
         //super.paintComponent(g); //get background stuff
         screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //get screen dimensions
-        double scalingFactor = .75;
+        double scalingFactor = .75; //we want the tiles to take up about 75% of the largest square that can fit on the screen
         //use the screen size to determine the ideal tile size
         
         if (screenSize.height > screenSize.width) {
@@ -107,12 +107,12 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
         			}
         			System.out.println("changedTiles.size(): " + changedTiles.size());
         			for (int i = 0; i < changedTiles.size(); i++) {
-        				if (changedTiles.get(i).get(0) == row && changedTiles.get(i).get(1) == col) {
-        					g.drawImage(ImageIO.read(imgFile), row*tileSize + (screenSize.width - maze.length * tileSize)/2, col*tileSize + (screenSize.height - maze[0].length * tileSize)/2, tileSize, tileSize, Color.WHITE, this);
+        				if (changedTiles.get(i).get(0) == row && changedTiles.get(i).get(1) == col) { //only redraw the tile if it was changed
+        					g.drawImage(ImageIO.read(imgFile), row*tileSize + (screenSize.width - maze.length * tileSize)/2, col*tileSize + (screenSize.height - maze[0].length * tileSize)/2, tileSize, tileSize, Color.WHITE, this); //the "+ (screenSize.width - maze.length * tileSize)/2" and the "+ (screenSize.height - maze[0].length * tileSize)/2" centers the tiles. Without it they would be at the top-left corner of the screen, which would be ugly
         				}
         			}
 					
-				} catch (Exception e) {
+				} catch (Exception e) { //since we are reading image data from ImageIO.read(), we need to prepare for IOExceptions (for example)
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -126,7 +126,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 			e.printStackTrace();
 		}
         if (!this.first) {
-        	changedTiles.clear();
+        	changedTiles.clear(); //after you update all the tiles, clear them from the list of changed tiles so we dont update them next frame (unless they get changed again)
         }
         
     }
@@ -139,7 +139,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(KeyEvent e) { //makes changes (for example moves the player) if you press a key
 		// TODO Auto-generated method stub
 		int keyCode = e.getKeyCode();
 		System.out.println(keyCode);
@@ -151,11 +151,11 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	        		ArrayList<Integer> temp = new ArrayList<>();
 	        		temp.add(playerX);
 	        		temp.add(playerY-1);
-	        		changedTiles.add(temp);
+	        		changedTiles.add(temp); //and the future position to our list of changed tiles
 	        		ArrayList<Integer> temp2 = new ArrayList<>();
 	        		temp2.add(playerX);
 	        		temp2.add(playerY);
-	        		changedTiles.add(temp2);
+	        		changedTiles.add(temp2); //add the current position to our list of changed tiles
 	        		playerY--;
 	        		this.first = false;
 	        	}
@@ -167,11 +167,11 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	        		ArrayList<Integer> temp = new ArrayList<>();
 	        		temp.add(playerX);
 	        		temp.add(playerY+1);
-	        		changedTiles.add(temp);
+	        		changedTiles.add(temp); //and the future position to our list of changed tiles
 	        		ArrayList<Integer> temp2 = new ArrayList<>();
 	        		temp2.add(playerX);
 	        		temp2.add(playerY);
-	        		changedTiles.add(temp2);
+	        		changedTiles.add(temp2); //add the current position to our list of changed tiles
 	        		playerY++;
 	        		this.first = false;
 	        	}
@@ -183,11 +183,11 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	        		ArrayList<Integer> temp = new ArrayList<>();
 	        		temp.add(playerX-1);
 	        		temp.add(playerY);
-	        		changedTiles.add(temp);
+	        		changedTiles.add(temp); //and the future position to our list of changed tiles
 	        		ArrayList<Integer> temp2 = new ArrayList<>();
 	        		temp2.add(playerX);
 	        		temp2.add(playerY);
-	        		changedTiles.add(temp2);
+	        		changedTiles.add(temp2); //add the current position to our list of changed tiles
 	        		playerX--;
 	        		this.first = false;
 	        	}
@@ -199,11 +199,11 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	        		ArrayList<Integer> temp = new ArrayList<>();
 	        		temp.add(playerX+1);
 	        		temp.add(playerY);
-	        		changedTiles.add(temp);
+	        		changedTiles.add(temp); //and the future position to our list of changed tiles
 	        		ArrayList<Integer> temp2 = new ArrayList<>();
 	        		temp2.add(playerX);
 	        		temp2.add(playerY);
-	        		changedTiles.add(temp2);
+	        		changedTiles.add(temp2); //add the current position to our list of changed tiles
 	        		playerX++;
 	        		this.first = false;
 	        	}
@@ -255,7 +255,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 		int col = 0;
 		for (int i = 0; i < maze.length; i++) {
 			for (int j = 0; j < maze.length; j++) {
-				if (i*tileSize + (screenSize.width - maze.length * tileSize)/2 < arg0.getX() && (i+1)*tileSize + (screenSize.width - maze.length * tileSize)/2 > arg0.getX() && j*tileSize + (screenSize.height - maze[0].length * tileSize)/2 < arg0.getY() && (j+1)*tileSize + (screenSize.height - maze[0].length * tileSize)/2 > arg0.getY()) {
+				if (i*tileSize + (screenSize.width - maze.length * tileSize)/2 < arg0.getX() && (i+1)*tileSize + (screenSize.width - maze.length * tileSize)/2 > arg0.getX() && j*tileSize + (screenSize.height - maze[0].length * tileSize)/2 < arg0.getY() && (j+1)*tileSize + (screenSize.height - maze[0].length * tileSize)/2 > arg0.getY()) { //very complicated if statement to check if the coordinates of the mouse click are on the (i,j) tile
 					row = i;
 					col = j;
 				}
@@ -263,24 +263,24 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 		}
 		System.out.println("row: " + row);
 		System.out.println("col: " + col);
-		if (maze[row][col].getType() == TileType.DOOR && maze[row][col].isWalkable()) {
+		if (maze[row][col].getType() == TileType.DOOR && maze[row][col].isWalkable()) { //if you clicked on an open door then close it
 			maze[row][col].close();
 			ArrayList<Integer> temp = new ArrayList<>();
-    		temp.add(row);
-    		temp.add(col);
-    		changedTiles.add(temp);
+    			temp.add(row);
+    			temp.add(col);
+    			changedTiles.add(temp); //add the door's coordinates to changedTiles
 		}
-		else if (maze[row][col].getType() == TileType.DOOR && !maze[row][col].isWalkable()) {
+		else if (maze[row][col].getType() == TileType.DOOR && !maze[row][col].isWalkable()) { //if you clicked on a closed door then open it
 			maze[row][col].open();
 			ArrayList<Integer> temp = new ArrayList<>();
-    		temp.add(row);
-    		temp.add(col);
-    		changedTiles.add(temp);
+    			temp.add(row);
+    			temp.add(col);
+    			changedTiles.add(temp); //add the door's coordinates to changedTiles
 		}
 		ArrayList<Integer> temp2 = new ArrayList<>();
 		temp2.add(row);
 		temp2.add(col);
-		changedTiles.add(temp2);
+		changedTiles.add(temp2); //debugging tool that lets me update any tile by clicking on it
 		if (!this.first) {
 			repaint();
 		}
