@@ -35,8 +35,8 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener{
         this.playerY = 0;
         this.setFocusable(true);
         this.addKeyListener(this);
-        Timer listener = new Timer(1000/60, this);
-        listener.start();
+        //Timer listener = new Timer(1000/20, this);
+        //listener.start();
     }
 
     //paint a ball
@@ -107,12 +107,6 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 		int keyCode = e.getKeyCode();
 		System.out.println(keyCode);
 	    switch( keyCode ) { 
@@ -146,6 +140,12 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener{
 	            break;
 	     }
 	    repaint();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
