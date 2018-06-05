@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,12 +21,14 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class MazePanel extends JPanel implements KeyListener, ActionListener{
+public class MazePanel extends JPanel implements KeyListener, ActionListener, MouseListener{
 	private int width;
 	private int height;
 	private Tile[][] maze;
 	private int playerX;
 	private int playerY;
+	public int tileSize;
+	public Dimension screenSize;
     //construct a PongPanel
     public MazePanel(int width, int height, Tile[][] maze){
         setBackground(Color.WHITE);
@@ -35,6 +39,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener{
         this.playerY = 0;
         this.setFocusable(true);
         this.addKeyListener(this);
+        this.addMouseListener(this);
         //Timer listener = new Timer(1000/20, this);
         //listener.start();
     }
@@ -49,8 +54,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener{
         g = buffy.getGraphics();
 	*/
         super.paintComponent(g); //get background stuff
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //get screen dimensions
-        int tileSize;
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //get screen dimensions
         double scalingFactor = .75;
         //use the screen size to determine the ideal tile size
         
@@ -77,6 +81,12 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener{
         			URL imgFile;
         			if (maze[row][col].getType() == TileType.WALL) {
         				imgFile = getClass().getResource("/Images/wallPixelArt.jpg");
+        			}
+        			else if (maze[row][col].getType() == TileType.DOOR && maze[row][col].isWalkable()) {
+        				imgFile = getClass().getResource("/Images/openDoor.png");
+        			}
+        			else if (maze[row][col].getType() == TileType.DOOR && !maze[row][col].isWalkable()) {
+        				imgFile = getClass().getResource("/Images/closedDoor.jpg");
         			}
         			else {
         				imgFile = getClass().getResource("/Images/tilePixelArt.png");
@@ -131,7 +141,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener{
 	        		playerX--;
 	        	}
 	            break;
-	        case KeyEvent.VK_RIGHT :
+	        case KeyEvent.VK_RIGHT:
 	            // handle right
 	        	System.out.println("Arrow key pressed");
 	        	if (playerX != width - 1 && maze[playerX+1][playerY].isWalkable()) {
@@ -150,6 +160,55 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		//find the tile that was clicked on
+		int row = 0;
+		int col = 0;
+		for (int i = 0; i < maze.length; i++) {
+			for (int j = 0; j < maze.length; j++) {
+				if (i*tileSize + (screenSize.width - maze.length * tileSize)/2 < arg0.getX() && (i+1)*tileSize + (screenSize.width - maze.length * tileSize)/2 > arg0.getX() && j*tileSize + (screenSize.height - maze[0].length * tileSize)/2 < arg0.getY() && (j+1)*tileSize + (screenSize.height - maze[0].length * tileSize)/2 > arg0.getY()) {
+					row = i;
+					col = j;
+				}
+			}
+		}
+		System.out.println("row: " + row);
+		System.out.println("col: " + col);
+		if (maze[row][col].getType() == TileType.DOOR && maze[row][col].isWalkable()) {
+			maze[row][col].close();
+		}
+		else if (maze[row][col].getType() == TileType.DOOR && !maze[row][col].isWalkable()) {
+			maze[row][col].open();
+		}
+		repaint();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}

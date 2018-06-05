@@ -36,7 +36,10 @@ public class Main{
         Tile[][] exampleMaze = new Tile[exampleSize][exampleSize];
         for (int i = 0; i < exampleSize; i ++) {
         	for (int j = 0; j < exampleSize; j++) {
-        		if (i == j) {
+        		if (i == 3 && j == 3) {
+        			exampleMaze[i][j] = new Tile(TileType.DOOR, null, false, i, j);
+        		}
+        		else if (i == j) {
         			exampleMaze[i][j] = new Tile(TileType.WALL, null, false, i, j);
         		}
         		else {
