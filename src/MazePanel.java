@@ -157,6 +157,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	        		temp2.add(playerY);
 	        		changedTiles.add(temp2);
 	        		playerY--;
+	        		this.first = false;
 	        	}
 	            break;
 	        case KeyEvent.VK_DOWN:
@@ -172,6 +173,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	        		temp2.add(playerY);
 	        		changedTiles.add(temp2);
 	        		playerY++;
+	        		this.first = false;
 	        	}
 	            break;
 	        case KeyEvent.VK_LEFT:
@@ -187,6 +189,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	        		temp2.add(playerY);
 	        		changedTiles.add(temp2);
 	        		playerX--;
+	        		this.first = false;
 	        	}
 	            break;
 	        case KeyEvent.VK_RIGHT:
@@ -202,15 +205,16 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	        		temp2.add(playerY);
 	        		changedTiles.add(temp2);
 	        		playerX++;
+	        		this.first = false;
 	        	}
 	            break;
 	     }
 	    if (!this.first) {
 			repaint();
 		}
-	    else {
-	    	this.first = false;
-	    }
+	    //else {
+	    	//this.first = false;
+	    //}
 	}
 
 	@Override
