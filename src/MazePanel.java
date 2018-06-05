@@ -20,15 +20,18 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import java.util.ArrayList;
 
 public class MazePanel extends JPanel implements KeyListener, ActionListener, MouseListener{
 	private int width;
 	private int height;
 	private Tile[][] maze;
+	ArrayList<ArrayList<Integer>> changedTiles;
 	private int playerX;
 	private int playerY;
 	public int tileSize;
 	public Dimension screenSize;
+	public boolean first;
     //construct a PongPanel
     public MazePanel(int width, int height, Tile[][] maze){
         setBackground(Color.WHITE);
@@ -40,6 +43,17 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
         this.setFocusable(true);
         this.addKeyListener(this);
         this.addMouseListener(this);
+        this.changedTiles = new ArrayList<>();
+        for (int i = 0; i < maze.length; i++) {
+        	for (int j = 0; j < maze[0].length; j++) {
+        		ArrayList<Integer> temp = new ArrayList<>();
+        		temp.add(i);
+        		temp.add(j);
+        		this.changedTiles.add(temp);
+        	}
+        }
+        this.first = true;
+        //repaint();
         //Timer listener = new Timer(1000/20, this);
         //listener.start();
     }
@@ -53,7 +67,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
         BufferedImage buffy = config.createCompatibleImage(width, height, Transparency.TRANSLUCENT);
         g = buffy.getGraphics();
 	*/
-        super.paintComponent(g); //get background stuff
+        //super.paintComponent(g); //get background stuff
         screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //get screen dimensions
         double scalingFactor = .75;
         //use the screen size to determine the ideal tile size
@@ -91,8 +105,14 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
         			else {
         				imgFile = getClass().getResource("/Images/tilePixelArt.png");
         			}
-					g.drawImage(ImageIO.read(imgFile), row*tileSize + (screenSize.width - maze.length * tileSize)/2, col*tileSize + (screenSize.height - maze[0].length * tileSize)/2, tileSize, tileSize, this);
-				} catch (IOException e) {
+        			System.out.println("changedTiles.size(): " + changedTiles.size());
+        			for (int i = 0; i < changedTiles.size(); i++) {
+        				if (changedTiles.get(i).get(0) == row && changedTiles.get(i).get(1) == col) {
+        					g.drawImage(ImageIO.read(imgFile), row*tileSize + (screenSize.width - maze.length * tileSize)/2, col*tileSize + (screenSize.height - maze[0].length * tileSize)/2, tileSize, tileSize, Color.WHITE, this);
+        				}
+        			}
+					
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -105,12 +125,18 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        if (!this.first) {
+        	changedTiles.clear();
+        }
+        else {
+        	this.first = false;
+        }
     }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		repaint();
+		//repaint();
 		
 	}
 
@@ -124,6 +150,14 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	            // handle up
 	        	System.out.println("Arrow key pressed");
 	        	if (playerY != 0 && maze[playerX][playerY-1].isWalkable()) {
+	        		ArrayList<Integer> temp = new ArrayList<>();
+	        		temp.add(playerX);
+	        		temp.add(playerY-1);
+	        		changedTiles.add(temp);
+	        		ArrayList<Integer> temp2 = new ArrayList<>();
+	        		temp2.add(playerX);
+	        		temp2.add(playerY);
+	        		changedTiles.add(temp2);
 	        		playerY--;
 	        	}
 	            break;
@@ -131,6 +165,14 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	            // handle down 
 	        	System.out.println("Arrow key pressed");
 	        	if (playerY != height - 1 && maze[playerX][playerY+1].isWalkable()) {
+	        		ArrayList<Integer> temp = new ArrayList<>();
+	        		temp.add(playerX);
+	        		temp.add(playerY+1);
+	        		changedTiles.add(temp);
+	        		ArrayList<Integer> temp2 = new ArrayList<>();
+	        		temp2.add(playerX);
+	        		temp2.add(playerY);
+	        		changedTiles.add(temp2);
 	        		playerY++;
 	        	}
 	            break;
@@ -138,6 +180,14 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	            // handle left
 	        	System.out.println("Arrow key pressed");
 	        	if (playerX != 0 && maze[playerX-1][playerY].isWalkable()) {
+	        		ArrayList<Integer> temp = new ArrayList<>();
+	        		temp.add(playerX-1);
+	        		temp.add(playerY);
+	        		changedTiles.add(temp);
+	        		ArrayList<Integer> temp2 = new ArrayList<>();
+	        		temp2.add(playerX);
+	        		temp2.add(playerY);
+	        		changedTiles.add(temp2);
 	        		playerX--;
 	        	}
 	            break;
@@ -145,11 +195,21 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 	            // handle right
 	        	System.out.println("Arrow key pressed");
 	        	if (playerX != width - 1 && maze[playerX+1][playerY].isWalkable()) {
+	        		ArrayList<Integer> temp = new ArrayList<>();
+	        		temp.add(playerX+1);
+	        		temp.add(playerY);
+	        		changedTiles.add(temp);
+	        		ArrayList<Integer> temp2 = new ArrayList<>();
+	        		temp2.add(playerX);
+	        		temp2.add(playerY);
+	        		changedTiles.add(temp2);
 	        		playerX++;
 	        	}
 	            break;
 	     }
-	    repaint();
+	    if (!this.first) {
+			repaint();
+		}
 	}
 
 	@Override
@@ -200,11 +260,26 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 		System.out.println("col: " + col);
 		if (maze[row][col].getType() == TileType.DOOR && maze[row][col].isWalkable()) {
 			maze[row][col].close();
+			ArrayList<Integer> temp = new ArrayList<>();
+    		temp.add(row);
+    		temp.add(col);
+    		changedTiles.add(temp);
 		}
 		else if (maze[row][col].getType() == TileType.DOOR && !maze[row][col].isWalkable()) {
 			maze[row][col].open();
+			ArrayList<Integer> temp = new ArrayList<>();
+    		temp.add(row);
+    		temp.add(col);
+    		changedTiles.add(temp);
 		}
-		repaint();
+		ArrayList<Integer> temp2 = new ArrayList<>();
+		temp2.add(row);
+		temp2.add(col);
+		changedTiles.add(temp2);
+		if (!this.first) {
+			repaint();
+		}
+		
 	}
 
 	@Override

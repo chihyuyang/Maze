@@ -15,7 +15,6 @@ public class Main{
 
 	static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
     public static void main(String[] args) {
-
         JFrame frame = new JFrame("Maze");
         frame.setFocusable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,7 +35,7 @@ public class Main{
         Tile[][] exampleMaze = new Tile[exampleSize][exampleSize];
         for (int i = 0; i < exampleSize; i ++) {
         	for (int j = 0; j < exampleSize; j++) {
-        		if (i == 3 && j == 3) {
+        		if (i == 1 && j == 1) {
         			exampleMaze[i][j] = new Tile(TileType.DOOR, null, false, i, j);
         		}
         		else if (i == j) {
