@@ -14,7 +14,19 @@ public class Tile {
 		this.y = y;
 	}
 	
+	public boolean isWalkable() {
+		return this.walkable;
+	}
+	
 	public void open(){
 		this.walkable = true;
+	}
+	
+	public void close(){
+		this.walkable = false;
+	}
+	
+	public TileType getType() {
+		return this.type;
 	}
 }
