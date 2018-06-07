@@ -15,7 +15,7 @@ public class Main
     MazePanel ballPanel = new MazePanel();
     frame.add(ballPanel, BorderLayout.CENTER);
 
-    frame.setSize(500, 490);
+    frame.setSize(511, 539);
     frame.setVisible(true);
   }
 }
