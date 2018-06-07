@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -28,12 +29,14 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+    
+    Tile[][] tileArray = new Tile[mazeArray.length][mazeArray[0].length];
 
   public MazePanel()
   {
@@ -41,15 +44,34 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
     setFocusable(true);
     addKeyListener(this);
     addMouseListener(this);
-
-    //call the step() function 60 times per second
+    
+    for (int i = 0; i < mazeArray.length; i++)//Creates a new 2D array for a tile-object equivalent to the integer array.
+    {
+      for (int n = 0; n < mazeArray[i].length; n++)
+      {
+        if (mazeArray[n][i] == 0)
+        {
+          Blank newBlank = new Blank(n, i);
+          
+          tileArray[n][i] = newBlank;
+        }
+        
+        if (mazeArray[n][i] == 1)
+        {
+          Wall newWall = new Wall(n, i);
+          
+          tileArray[n][i] = newWall;
+        }
+      }
+    }
+    //call the step() function once every 100ms
     Timer timer = new Timer(100, this);
     timer.start();
   }
 
   public void actionPerformed(ActionEvent e) 
   {
-    step();
+    step(); //im trying to make some boundaries for window size rn
   }
 
   //move the ball based on which keys are pressed
@@ -57,22 +79,58 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
   {
     if (rightPressed) 
     {
-      x_pos += 50;
+    	//System.out.println((tileArray[(y_pos/50)][(x_pos/50) + 1]).getPassable());
+		//System.out.println((tileArray[(y_pos/50)][(x_pos/50) + 1]));
+    	if((tileArray[(y_pos/50)][(x_pos/50) + 1]).getPassable() == false)
+    	{
+    		x_pos = x_pos;
+    	}
+    	
+    	else
+    	{
+    		x_pos += 50;
+    	}
     } 
 
     if (leftPressed)
     {
-      x_pos -= 50;
-    } 
+    	//System.out.println((tileArray[(y_pos/50)][(x_pos/50) - 1]).getPassable());
+		//System.out.println((tileArray[(y_pos/50)][(x_pos/50) - 1]));
+    	if((tileArray[(y_pos/50)][(x_pos/50) - 1]).getPassable() == false)
+    	{
+    		x_pos = x_pos;
+    	}
+    	
+    	else
+    	{
+    		x_pos -= 50;
+    	}
+	}
 
     if (upPressed) 
     {
-      y_pos -= 50;
+    	if((tileArray[(y_pos/50) - 1][(x_pos/50)]).getPassable() == false)
+    	{
+    		y_pos = y_pos;
+    	}
+    	
+    	else
+    	{
+    		y_pos -= 50;
+    	}
     }
 
     if (downPressed)
     {
-      y_pos += 50;
+    	if((tileArray[(y_pos/50) + 1][(x_pos/50)]).getPassable() == false)
+    	{
+    		y_pos = y_pos;
+    	}
+    	
+    	else
+    	{
+    		y_pos += 50;
+    	}
     }
 
     repaint();
@@ -88,13 +146,11 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
       {
         if (mazeArray[i][n] == 1)
         {
-          Wall newWall = new Wall(n, i);
+          //Wall newWall = new Wall(n, i);
 
           g.setColor(Color.BLACK);
           g.fillRect(n * 50, i * 50, ballDiameter, ballDiameter);
           repaint();
-
-          //System.out.println("works!");
         }
       }
     }
