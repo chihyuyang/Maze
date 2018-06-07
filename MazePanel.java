@@ -20,8 +20,20 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
   private boolean rightPressed = false;
 
   private int x_pos = 0;
-  private int y_pos = 395;
+  private int y_pos = 0;
   private int ballDiameter = 50;
+  
+  int[][] mazeArray = new int[][] {
+    {0, 1, 1, 1, 1, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
   public MazePanel()
   {
@@ -70,9 +82,29 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
   public void paintComponent(Graphics g)
   {
     super.paintComponent(g);
+    for (int i = 0; i < mazeArray.length; i++)// creates the visual
+    {
+      for (int n = 0; n < mazeArray[i].length; n++)
+      {
+        if (mazeArray[i][n] == 1)
+        {
+          Wall newWall = new Wall(n, i);
+
+          g.setColor(Color.BLACK);
+          g.fillRect(n * 50, i * 50, ballDiameter, ballDiameter);
+          repaint();
+
+          //System.out.println("works!");
+        }
+      }
+    }
+    
 
     g.setColor(Color.BLUE);
-    g.fillOval(x_pos, y_pos, ballDiameter, ballDiameter);     
+    g.fillOval(x_pos, y_pos, ballDiameter, ballDiameter);
+
+    ///////
+    
   }
 
   public void keyPressed(KeyEvent e) 
