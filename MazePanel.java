@@ -51,18 +51,18 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
     {
       for (int n = 0; n < mazeArray[i].length; n++)
       {
-        if (mazeArray[n][i] == 0)
+        if (mazeArray[i][n] == 0)
         {
           Blank newBlank = new Blank(n, i);
           
-          tileArray[n][i] = newBlank;
+          tileArray[i][n] = newBlank;
         }
         
-        if (mazeArray[n][i] == 1)
+        if (mazeArray[i][n] == 1)
         {
           Wall newWall = new Wall(n, i);
           
-          tileArray[n][i] = newWall;
+          tileArray[i][n] = newWall;
         }
       }
     }
