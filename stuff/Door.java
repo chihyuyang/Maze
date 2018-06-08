@@ -25,6 +25,12 @@ public class Door extends Tile
 		tileColor = Color.WHITE;
 	}
 	
+	public void lock()
+	{
+		passable = false;
+		tileColor = Color.YELLOW;
+	}
+	
 	public Color getColor()
 	{
 		  return tileColor;

@@ -16,7 +16,7 @@ public class Main
     frame.add(ballPanel, BorderLayout.CENTER);
 
     //frame.setSize(511, 539);
-    frame.setSize(1511, 1000);
+    frame.setSize(1511, 989);
     frame.setVisible(true);
   }
 }
