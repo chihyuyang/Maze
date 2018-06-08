@@ -34,7 +34,9 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
     {0, 1, 0, 1, 0, 1, 0, 1, 1, 1},
     {0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 0, 1}};
+    {1, 1, 0, 1, 1, 1, 1, 1, 0, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
+    {1, 1, 0, 1, 1, 1, 1, 1, 0, 1}};
     
     Tile[][] tileArray = new Tile[mazeArray.length][mazeArray[0].length];
 
@@ -45,7 +47,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
     addKeyListener(this);
     addMouseListener(this);
     
-    for (int i = 0; i < mazeArray.length; i++)//Creates a new 2D array for a tile-object equivalent to the integer array.
+    for (int i = 0; i < mazeArray[0].length; i++)//Creates a new 2D array for a tile-object equivalent to the integer array.
     {
       for (int n = 0; n < mazeArray[i].length; n++)
       {
@@ -122,6 +124,8 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
 
     if (downPressed)
     {
+    	System.out.println((tileArray[(y_pos/50 + 1)][(x_pos/50)]).getPassable());
+    	System.out.println((tileArray[(y_pos/50 + 1)][(x_pos/50)]));
     	if((tileArray[(y_pos/50) + 1][(x_pos/50)]).getPassable() == false)
     	{
     		y_pos = y_pos;
