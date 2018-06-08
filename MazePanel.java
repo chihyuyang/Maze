@@ -47,7 +47,7 @@ public class MazePanel extends JPanel implements KeyListener, ActionListener, Mo
     addKeyListener(this);
     addMouseListener(this);
     
-    for (int i = 0; i < mazeArray[0].length; i++)//Creates a new 2D array for a tile-object equivalent to the integer array.
+    for (int i = 0; i < mazeArray.length; i++)//Creates a new 2D array for a tile-object equivalent to the integer array.
     {
       for (int n = 0; n < mazeArray[i].length; n++)
       {
